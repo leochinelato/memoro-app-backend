@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tasks     Task[]
+
+  @@map("users")
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  status      TaskStatus @default(PENDING)
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  startsAt    DateTime
+  endsAt      DateTime
+
+  @@map("tasks")
+}
+
+model Category {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  tasks Task[]
+
+  @@map("categories")
+}
