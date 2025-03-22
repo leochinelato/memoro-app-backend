@@ -32,3 +32,5 @@ Thumbs.db
 # Optional: ignore SQLite files used for dev
 *.sqlite
 *.sqlite-journal
+
+todo.md
