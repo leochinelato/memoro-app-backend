@@ -23,7 +23,7 @@ export interface TaskRepository {
     create({name, description, status, userId, categoryId, startsAt, endsAt}: TaskCreate): Promise<Task>;
     findByName(name: string): Promise<Task | null>
 	findAllByUserId(userId: string): Promise<Task[]>
-	updateTask({id, name, description, status, categoryId, userId, startsAt, endsAt}: Task): Promise<Task>
-	delete(id: string): Promise<Boolean>
+	updateTask(userId: string, {id, name, description, status, categoryId, startsAt, endsAt}: Task): Promise<Task>
+	delete(id: string, userId: string): Promise<Boolean>
 	findById(id: string): Promise<Task | null>
 }

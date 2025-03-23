@@ -23,6 +23,7 @@ export async function taskRoutes(fastify: FastifyInstance) {
     })
 
     fastify.get('/', async (request, reply) => {
+        console.log(request.user)
         try {
             const data = await taskUseCase.getTasksByUser(request.user.id)
             return reply.send(data)
@@ -33,21 +34,25 @@ export async function taskRoutes(fastify: FastifyInstance) {
 
     fastify.put<{ Body: TaskCreate, Params: { id: string } }>('/:id', async (request, reply) => {
         const { id } = request.params
+        const userId = request.user.id
+        
         const { name, description, status, categoryId, startsAt, endsAt } = request.body
         try {
-            const data = await taskUseCase.updateTask({ id, name, description, status, categoryId, startsAt, endsAt })
+            const data = await taskUseCase.updateTask(userId ,{ id, name, description, status, categoryId, startsAt, endsAt })
             return reply.code(200).send(data)
         } catch (error) {
             reply.code(500).send(error)
         }
     })
 
-    fastify.delete<{ Params: { id: string } }>('/:id', async (request, reply) => {
-        const { id } = request.params
+    fastify.delete<{ Params: { taskId: string, userId: string } }>('/:id', async (request, reply) => {
+        const { taskId } = request.params
+        const userId = request.user.id
         try {
-            const data = await taskUseCase.delete(id)
+            const data = await taskUseCase.delete(taskId, userId)
             return reply.code(200).send(data)
         } catch (error) {
+            console.log(error)
             reply.code(500).send(error)
         }
     })

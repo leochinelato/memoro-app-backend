@@ -35,31 +35,46 @@ export class TaskUseCase {
         return tasks
     }
 
-    
-    async updateTask({ id, name, description, status, categoryId, userId, startsAt, endsAt }: Task) {
-        const data = await this.taskRepository.updateTask({
-            id,
-            name,
-            description,
-            status,
-            categoryId,
-            userId,
-            startsAt,
-            endsAt
-        })
-        return data
-    }
 
-    async delete(id: string) {
+    async updateTask(userId: string, { id, name, description, status, categoryId, startsAt, endsAt }: Task) {
         const task = await this.taskRepository.findById(id)
 
         if (!task) {
             throw new Error('Task not found.')
         }
 
-        return await this.taskRepository.delete(id)
+        if (task.userId !== userId) {
+            throw new Error('Unauthorized.')
+        }
+        
+        const data = await this.taskRepository.updateTask(
+            userId,
+            {
+                id,
+                name,
+                description,
+                status,
+                categoryId,
+                startsAt,
+                endsAt
+            })
+        return data
     }
- 
+
+    async delete(taskId: string, userId: string) {
+        const task = await this.taskRepository.findById(taskId)
+
+        if (!task) {
+            throw new Error('Task not found.')
+        }
+
+        if (task.userId !== userId) {
+            throw new Error('Unauthorized.')
+        }
+
+        return await this.taskRepository.delete(taskId, userId)
+    }
+
 
 
 }
