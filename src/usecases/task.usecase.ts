@@ -50,20 +50,11 @@ export class TaskUseCase {
         return data
     }
 
-    async delete(id: string, userEmail: string) {
-        const user = await this.userRepository.findByEmail(userEmail)
+    async delete(id: string) {
         const task = await this.taskRepository.findById(id)
-        
-        if (!user) {
-            throw new Error('User not found.')
-        }
 
         if (!task) {
             throw new Error('Task not found.')
-        }
-
-        if (task.userId !== user.id) {
-            throw new Error('Unauthorized: you cannot delete tasks that are not yours.')
         }
 
         return await this.taskRepository.delete(id)
