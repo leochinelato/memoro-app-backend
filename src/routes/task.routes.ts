@@ -1,20 +1,20 @@
 import { FastifyInstance } from "fastify";
 import { TaskCreate } from "../interfaces/task.interface";
 import { TaskUseCase } from "../usecases/task.usecase";
-import { authMiddleware } from "../middlewares/auth.middleware";
-import { UserUseCase } from "../usecases/user.usecase";
+import { verifyJWT } from "../middlewares/auth.middleware";
 
 export async function taskRoutes(fastify: FastifyInstance) {
     const taskUseCase = new TaskUseCase()
 
-    fastify.addHook('preHandler', authMiddleware)
+    fastify.addHook('onRequest', verifyJWT)
 
     fastify.post<{ Body: TaskCreate }>('/', async (request, reply) => {
         const { name, description, status, categoryId, startsAt, endsAt } = request.body
-        const emailUser = request.headers['email'] as string
+        const userId = request.user.id
+
         try {
             const data = await taskUseCase.create({
-                name, description, status, userEmail: emailUser, categoryId, startsAt, endsAt
+                name, description, status, userId, categoryId, startsAt, endsAt
             })
             return reply.code(201).send(data)
         } catch (error) {
@@ -23,9 +23,8 @@ export async function taskRoutes(fastify: FastifyInstance) {
     })
 
     fastify.get('/', async (request, reply) => {
-        const emailUser = request.headers['email'] as string
         try {
-            const data = await taskUseCase.listAllTasks(emailUser)
+            const data = await taskUseCase.getTasksByUser(request.user.id)
             return reply.send(data)
         } catch (error) {
             reply.code(500).send(error)

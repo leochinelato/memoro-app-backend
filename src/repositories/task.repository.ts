@@ -1,8 +1,8 @@
 import { prisma } from "../database/prisma-client";
-import { Task, TaskCreate, TaskCreateData, TaskRepository } from "../interfaces/task.interface";
+import { Task, TaskCreate, TaskRepository } from "../interfaces/task.interface";
 
 class TaskRepositoryPrisma implements TaskRepository {
-    async create(data: TaskCreateData): Promise<Task> {
+    async create(data: TaskCreate): Promise<Task> {
         const result = await prisma.task.create({
             data: {
                 name: data.name,
@@ -35,7 +35,7 @@ class TaskRepositoryPrisma implements TaskRepository {
         return result || null
     }
 
-    async findAllTasks(userId: string): Promise<Task[]> {
+    async findAllByUserId(userId: string): Promise<Task[]> {
         const result = await prisma.task.findMany({
             where: { userId }
         })

@@ -13,12 +13,11 @@ export class TaskUseCase {
         this.userRepository = new UserRepositoryPrisma()
     }
 
-    async create({ name, description, status, userEmail, categoryId, startsAt, endsAt }: TaskCreate): Promise<Task> {
-        const user = await this.userRepository.findByEmail(userEmail)
+    async create({ name, description, status, userId, categoryId, startsAt, endsAt }: TaskCreate): Promise<Task> {
         const validStatus = status ?? TaskStatus.PENDING;
 
-        if (!user) {
-            throw new Error('User with email ' + userEmail + ' not found.')
+        if (!userId) {
+            throw new Error('User not authenticated.')
         }
 
         if (!Object.values(TaskStatus).includes(validStatus)) {
@@ -26,20 +25,13 @@ export class TaskUseCase {
         }
 
         const task = await this.taskRepository.create({
-            name, description, status, userId: user.id, categoryId, startsAt, endsAt
+            name, description, status: validStatus, userId, categoryId, startsAt, endsAt
         })
         return task
     }
 
-    async listAllTasks(userEmail: string) {
-        const user = await this.userRepository.findByEmail(userEmail)
-
-        if (!user) {
-            throw new Error('User not found')
-        }
-
-        const tasks = await this.taskRepository.findAllTasks(user.id)
-
+    async getTasksByUser(userId: string) {
+        const tasks = await this.taskRepository.findAllByUserId(userId)
         return tasks
     }
 
