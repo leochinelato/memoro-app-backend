@@ -6,14 +6,15 @@ class UserRepositoryPrisma implements UserRepository {
         const result = await prisma.user.create({
             data: {
                 name: data.name,
-                email: data.email
+                email: data.email,
+                password: data.password
             }
         })
         return result
     }
     
     async findByEmail(email: string): Promise<User | null> {
-        const result = await prisma.user.findFirst({
+        const result = await prisma.user.findUnique({
             where: { email }
         })
         return result || null

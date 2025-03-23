@@ -43,18 +43,17 @@ export async function taskRoutes(fastify: FastifyInstance) {
         }
     })
 
-    // fastify.delete<{Params: {id: string}}>('/:id', async (request, reply) => {
-    //     const emailUser = request.headers['email'] as string
-    //     const user = await 
+    fastify.delete<{Params: {id: string}}>('/:id', async (request, reply) => {
+        const emailUser = request.headers['email'] as string
 
-    //     const { id } = request.params
-    //     try {
-    //         const data = await taskUseCase.delete(id)
-    //         return reply.code(200).send(data)
-    //     } catch (error) {
-    //         reply.code(500).send(error)
-    //     }
-    // })
+        const { id } = request.params
+        try {
+            const data = await taskUseCase.delete(id, emailUser)
+            return reply.code(200).send(data)
+        } catch (error) {
+            reply.code(500).send(error)
+        }
+    })
 
 
 }

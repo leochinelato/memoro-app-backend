@@ -43,8 +43,8 @@ export class TaskUseCase {
         return tasks
     }
 
+    
     async updateTask({ id, name, description, status, categoryId, userId, startsAt, endsAt }: Task) {
-
         const data = await this.taskRepository.updateTask({
             id,
             name,
