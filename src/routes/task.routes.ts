@@ -8,6 +8,7 @@ export async function taskRoutes(fastify: FastifyInstance) {
     const taskUseCase = new TaskUseCase()
 
     fastify.addHook('preHandler', authMiddleware)
+
     fastify.post<{ Body: TaskCreate }>('/', async (request, reply) => {
         const { name, description, status, categoryId, startsAt, endsAt } = request.body
         const emailUser = request.headers['email'] as string
@@ -36,7 +37,7 @@ export async function taskRoutes(fastify: FastifyInstance) {
         const { name, description, status, categoryId, startsAt, endsAt } = request.body
         try {
             const data = await taskUseCase.updateTask({ id, name, description, status, categoryId, startsAt, endsAt })
-            return reply.send(data)
+            return reply.code(200).send(data)
         } catch (error) {
             reply.code(500).send(error)
         }

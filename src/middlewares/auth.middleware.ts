@@ -4,7 +4,7 @@ export async function authMiddleware(request: FastifyRequest, reply: FastifyRepl
     const apiEmail = request.headers['email']
 
     if (!apiEmail) {
-        reply.status(401).send({message: 'Email is required.'})
+        reply.status(401).send({ message: 'Email is required.' })
     }
-    
+
 }

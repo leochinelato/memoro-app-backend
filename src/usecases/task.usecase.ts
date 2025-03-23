@@ -44,6 +44,7 @@ export class TaskUseCase {
     }
 
     async updateTask({ id, name, description, status, categoryId, userId, startsAt, endsAt }: Task) {
+
         const data = await this.taskRepository.updateTask({
             id,
             name,
@@ -54,6 +55,7 @@ export class TaskUseCase {
             startsAt,
             endsAt
         })
+        return data
     }
 
     async delete(id: string, userEmail: string) {
