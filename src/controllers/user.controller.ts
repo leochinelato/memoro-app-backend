@@ -54,4 +54,14 @@ export class UserController {
         }
     }
 
+    async deleteCurrentUser(request: FastifyRequest, reply: FastifyReply) {
+        const userId = request.user.id
+        try {
+            const data = await this.userUseCase.deleteUser(userId)
+            return reply.code(200).send(data)
+        } catch (error) {
+            return reply.code(500).send(error)
+        }
+    }
+
 }

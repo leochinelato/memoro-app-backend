@@ -43,6 +43,16 @@ class UserRepositoryPrisma implements UserRepository {
         })
         return result
     }
+
+    async deleteUser(userId: string): Promise<Boolean> {
+        console.log(userId)
+        const result = await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        })
+        return result ? true : false
+    }
 }
 
 export { UserRepositoryPrisma }

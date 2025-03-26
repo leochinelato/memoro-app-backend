@@ -62,4 +62,12 @@ export class UserUseCase {
 
         return updatedUser
     }
+
+    async deleteUser(userId: string) {
+        if (!userId) {
+            throw new Error('Unauthorized.')
+        }
+
+        return await this.userRepository.deleteUser(userId)
+    }
 }

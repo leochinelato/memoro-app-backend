@@ -25,4 +25,5 @@ export interface UserRepository {
     findByEmail(email: string): Promise<User | null>
     findUserById(userId: string): Promise<User | null>
     updateUser(userId: string, data: UserUpdate): Promise<User>
+    deleteUser(userId: string): Promise<Boolean>
 }
