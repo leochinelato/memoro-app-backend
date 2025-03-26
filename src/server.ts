@@ -9,14 +9,12 @@ dotenv.config()
 const app: FastifyInstance = fastify()
 
 app.register(jwt, {
-    secret: process.env.JWT_SECRET as string
+    secret: process.env.JWT_SECRET as string || 'abc123'
 })
 
 app.register(userRoutes, {
     prefix: '/api/v1/users'
 })
-
-// app.decorateRequest('user', null)
 
 app.register(taskRoutes, {
     prefix: '/api/v1/tasks'

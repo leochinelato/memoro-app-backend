@@ -55,7 +55,7 @@ class TaskRepositoryPrisma implements TaskRepository {
     }
     
     async delete(taskId: string, userId: string): Promise<Boolean> {
-        const result = await prisma.task.deleteMany({
+        const result = await prisma.task.delete({
             where: {
                 id: taskId,
                 userId

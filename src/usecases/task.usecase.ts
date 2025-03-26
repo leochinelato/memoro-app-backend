@@ -1,3 +1,4 @@
+import { TaskValidator } from "utils/validateDates";
 import { Task, TaskCreate, TaskRepository } from "../interfaces/task.interface";
 import { UserRepository } from "../interfaces/user.interface";
 import { TaskRepositoryPrisma } from "../repositories/task.repository";
@@ -24,6 +25,11 @@ export class TaskUseCase {
             throw new Error(`Invalid status. Allowed values: ${Object.values(TaskStatus).join(', ')}`);
         }
 
+        startsAt = new Date(startsAt)
+        endsAt = new Date(endsAt)
+
+        TaskValidator.validateTaskDates(startsAt, endsAt)
+
         const task = await this.taskRepository.create({
             name, description, status: validStatus, userId, categoryId, startsAt, endsAt
         })
@@ -35,8 +41,22 @@ export class TaskUseCase {
         return tasks
     }
 
+    async getTaskById(taskId: string, userId: string) {
+        const task = await this.taskRepository.findById(taskId)
 
-    async updateTask(userId: string, { id, name, description, status, categoryId, startsAt, endsAt }: Task) {
+        if (!task) {
+            throw new Error('Task not found.')
+        }
+
+        if (task.userId !== userId) {
+            throw new Error('Unauthorized.')
+        }
+
+        return task
+    }
+
+
+    async update(userId: string, { id, name, description, status, categoryId, startsAt, endsAt }: Task) {
         const task = await this.taskRepository.findById(id)
 
         if (!task) {
@@ -46,7 +66,12 @@ export class TaskUseCase {
         if (task.userId !== userId) {
             throw new Error('Unauthorized.')
         }
-        
+
+        startsAt = new Date(startsAt)
+        endsAt = new Date(endsAt)
+
+        TaskValidator.validateTaskDates(startsAt, endsAt)
+
         const data = await this.taskRepository.updateTask(
             userId,
             {
