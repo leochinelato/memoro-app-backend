@@ -1,4 +1,4 @@
-import { User, UserCreate, UserRepository, UserUpdate } from "../interfaces/user.interface";
+import { User, UserCreateDTO, UserRepository, UserUpdateDTO } from "../interfaces/user.interface";
 import { UserRepositoryPrisma } from "../repositories/user.repository";
 import bcrypt from 'bcryptjs'
 import jwt from "jsonwebtoken";
@@ -31,7 +31,7 @@ export class UserUseCase {
         return token
     }
 
-    async create({ name, email, password }: UserCreate): Promise<User> {
+    async create({ name, email, password }: UserCreateDTO): Promise<User> {
         const verifyIfUserExists = await this.userRepository.findByEmail(email)
 
         if (verifyIfUserExists) {
@@ -42,7 +42,7 @@ export class UserUseCase {
         return await this.userRepository.create({ name, email, password: hashedPassword })
     }
 
-    async updateUser(userId: string, data: UserUpdate): Promise<User> {
+    async updateUser(userId: string, data: UserUpdateDTO): Promise<User> {
         if (!userId) {
             throw new Error('Unauthorized.')
         }

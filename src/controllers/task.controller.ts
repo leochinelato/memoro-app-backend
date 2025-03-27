@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { TaskCreate } from "interfaces/task.interface";
+import { TaskCreateDTO } from "interfaces/task.interface";
 import { TaskUseCase } from "usecases/task.usecase";
 import { getUserId } from '../utils/getUserId';
 
@@ -33,7 +33,7 @@ export class TaskController {
         }
     }
 
-    async create(request: FastifyRequest<{ Body: TaskCreate }>, reply: FastifyReply) {
+    async create(request: FastifyRequest<{ Body: TaskCreateDTO }>, reply: FastifyReply) {
         const { name, description, status, categoryId, startsAt, endsAt } = request.body
         const userId = getUserId(request)
 
@@ -47,7 +47,7 @@ export class TaskController {
         }
     }
 
-    async update(request: FastifyRequest<{ Body: TaskCreate, Params: { id: string } }>, reply: FastifyReply) {
+    async update(request: FastifyRequest<{ Body: TaskCreateDTO, Params: { id: string } }>, reply: FastifyReply) {
         const { id } = request.params
         const userId = getUserId(request)
 

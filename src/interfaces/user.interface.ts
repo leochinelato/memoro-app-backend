@@ -7,13 +7,13 @@ export interface User {
     updatedAt: Date
 }
 
-export interface UserCreate {
+export interface UserCreateDTO {
     name: string
     email: string
     password: string
 }
 
-export interface UserUpdate {
+export interface UserUpdateDTO {
     name?: string
     email?: string
     password?: string
@@ -21,9 +21,9 @@ export interface UserUpdate {
 
 
 export interface UserRepository {
-    create(data: UserCreate): Promise<User>
+    create(data: UserCreateDTO): Promise<User>
     findByEmail(email: string): Promise<User | null>
     findUserById(userId: string): Promise<User | null>
-    updateUser(userId: string, data: UserUpdate): Promise<User>
+    updateUser(userId: string, data: UserUpdateDTO): Promise<User>
     deleteUser(userId: string): Promise<Boolean>
 }

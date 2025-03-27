@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { UserCreate } from "interfaces/user.interface";
+import { UserCreateDTO } from "interfaces/user.interface";
 import { UserUseCase } from "usecases/user.usecase";
 import { getUserId } from "utils/getUserId";
 
@@ -10,7 +10,7 @@ export class UserController {
         this.userUseCase = new UserUseCase()
     }
 
-    async register(request: FastifyRequest<{ Body: UserCreate }>, reply: FastifyReply) {
+    async register(request: FastifyRequest<{ Body: UserCreateDTO }>, reply: FastifyReply) {
         const { name, email, password } = request.body
         try {
             const user = await this.userUseCase.create({
@@ -38,7 +38,7 @@ export class UserController {
         }
     }
 
-    async updateCurrentUser(request: FastifyRequest<{ Body: UserCreate }>, reply: FastifyReply) {
+    async updateCurrentUser(request: FastifyRequest<{ Body: UserCreateDTO }>, reply: FastifyReply) {
         const userId = getUserId(request)
 
         const { email, name, password } = request.body

@@ -1,8 +1,8 @@
 import { prisma } from "../database/prisma-client";
-import { Task, TaskCreate, TaskRepository } from "../interfaces/task.interface";
+import { Task, TaskCreateDTO, TaskRepository } from "../interfaces/task.interface";
 
 class TaskRepositoryPrisma implements TaskRepository {
-    async create(data: TaskCreate): Promise<Task> {
+    async create(data: TaskCreateDTO): Promise<Task> {
         const result = await prisma.task.create({
             data: {
                 name: data.name,

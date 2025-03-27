@@ -1,5 +1,5 @@
 import { TaskValidator } from "utils/validateDates";
-import { Task, TaskCreate, TaskRepository } from "../interfaces/task.interface";
+import { Task, TaskCreateDTO, TaskRepository } from "../interfaces/task.interface";
 import { UserRepository } from "../interfaces/user.interface";
 import { TaskRepositoryPrisma } from "../repositories/task.repository";
 import { UserRepositoryPrisma } from "../repositories/user.repository";
@@ -14,7 +14,7 @@ export class TaskUseCase {
         this.userRepository = new UserRepositoryPrisma()
     }
 
-    async create({ name, description, status, userId, categoryId, startsAt, endsAt }: TaskCreate): Promise<Task> {
+    async create({ name, description, status, userId, categoryId, startsAt, endsAt }: TaskCreateDTO): Promise<Task> {
         const validStatus = status ?? TaskStatus.PENDING;
 
         if (!userId) {

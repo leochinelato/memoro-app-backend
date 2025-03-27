@@ -1,9 +1,9 @@
 import { prisma } from "../database/prisma-client";
-import { User, UserCreate, UserRepository, UserUpdate } from "../interfaces/user.interface";
+import { User, UserCreateDTO, UserRepository, UserUpdateDTO } from "../interfaces/user.interface";
 
 class UserRepositoryPrisma implements UserRepository {
 
-    async create(data: UserCreate): Promise<User> {
+    async create(data: UserCreateDTO): Promise<User> {
         const result = await prisma.user.create({
             data: {
                 name: data.name,
@@ -30,7 +30,7 @@ class UserRepositoryPrisma implements UserRepository {
         return result || null
     }
 
-    async updateUser(userId: string, data: UserUpdate): Promise<User> {
+    async updateUser(userId: string, data: UserUpdateDTO): Promise<User> {
         const result = await prisma.user.update({
             where: {
                 id: userId

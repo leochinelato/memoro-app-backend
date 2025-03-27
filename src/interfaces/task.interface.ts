@@ -9,7 +9,7 @@ export interface Task {
 	endsAt: Date
 }
 
-export interface TaskCreate {
+export interface TaskCreateDTO {
     name: string
 	description?: string
 	status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
@@ -20,7 +20,7 @@ export interface TaskCreate {
 }
 
 export interface TaskRepository {
-    create({name, description, status, userId, categoryId, startsAt, endsAt}: TaskCreate): Promise<Task>;
+    create({name, description, status, userId, categoryId, startsAt, endsAt}: TaskCreateDTO): Promise<Task>;
     findByName(name: string): Promise<Task | null>
 	findAllByUserId(userId: string): Promise<Task[]>
 	updateTask(userId: string, {id, name, description, status, categoryId, startsAt, endsAt}: Task): Promise<Task>
