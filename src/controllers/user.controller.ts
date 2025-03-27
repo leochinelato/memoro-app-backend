@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserCreate } from "interfaces/user.interface";
 import { UserUseCase } from "usecases/user.usecase";
+import { getUserId } from "utils/getUserId";
 
 export class UserController {
     private userUseCase: UserUseCase
@@ -17,7 +18,6 @@ export class UserController {
                 email,
                 password
             })
-            console.log('user registrado!!')
             return reply.code(201).send({
                 id: user.id,
                 name: user.name,
@@ -32,7 +32,6 @@ export class UserController {
         const { email, password } = request.body
         try {
             const token = await this.userUseCase.loginUser(email, password)
-            console.log(token)
             reply.send({ token })
         } catch (error) {
             reply.code(401).send({ message: 'Invalid credentials.' })
@@ -40,7 +39,7 @@ export class UserController {
     }
 
     async updateCurrentUser(request: FastifyRequest<{ Body: UserCreate }>, reply: FastifyReply) {
-        const userId = request.user.id
+        const userId = getUserId(request)
 
         const { email, name, password } = request.body
 
@@ -55,10 +54,10 @@ export class UserController {
     }
 
     async deleteCurrentUser(request: FastifyRequest, reply: FastifyReply) {
-        const userId = request.user.id
+        const userId = getUserId(request)
         try {
             const data = await this.userUseCase.deleteUser(userId)
-            return reply.code(200).send(data)
+            return reply.code(204).send(data)
         } catch (error) {
             return reply.code(500).send(error)
         }

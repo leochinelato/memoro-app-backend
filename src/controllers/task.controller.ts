@@ -1,6 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { TaskCreate } from "interfaces/task.interface";
 import { TaskUseCase } from "usecases/task.usecase";
+import { getUserId } from '../utils/getUserId';
+
 
 export class TaskController {
     private taskUseCase: TaskUseCase
@@ -9,9 +11,10 @@ export class TaskController {
         this.taskUseCase = new TaskUseCase()
     }
 
-    async getAll(request: FastifyRequest, reply: FastifyReply) {
+    async getAll( request: FastifyRequest, reply: FastifyReply ) {
+        const userId = getUserId(request)
         try {
-            const data = await this.taskUseCase.getTasksByUser(request.user.id)
+            const data = await this.taskUseCase.getTasksByUser(userId)
             return reply.status(200).send(data)
         } catch (error) {
             reply.status(500).send(error)
@@ -20,7 +23,7 @@ export class TaskController {
 
     async getById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
         const { id } = request.params
-        const userId = request.user.id
+        const userId = getUserId(request)
 
         try {
             const data = await this.taskUseCase.getTaskById(id, userId)
@@ -32,7 +35,7 @@ export class TaskController {
 
     async create(request: FastifyRequest<{ Body: TaskCreate }>, reply: FastifyReply) {
         const { name, description, status, categoryId, startsAt, endsAt } = request.body
-        const userId = request.user.id
+        const userId = getUserId(request)
 
         try {
             const data = await this.taskUseCase.create({
@@ -46,7 +49,7 @@ export class TaskController {
 
     async update(request: FastifyRequest<{ Body: TaskCreate, Params: { id: string } }>, reply: FastifyReply) {
         const { id } = request.params
-        const userId = request.user.id
+        const userId = getUserId(request)
 
         const { name, description, status, categoryId, startsAt, endsAt } = request.body
         try {
@@ -60,11 +63,11 @@ export class TaskController {
 
     async delete(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
         const { id } = request.params
-        const userId = request.user.id
+        const userId = getUserId(request)
         try {
             console.log(id)
             const data = await this.taskUseCase.delete(id, userId)
-            return reply.code(200).send(data)
+            return reply.code(204).send(data)
         } catch (error) {
             console.log(error)
             reply.code(500).send(error)
