@@ -1,7 +1,7 @@
-import { prisma } from "../database/prisma-client";
+import { prisma } from "database/prisma-client";
 import { Task, TaskCreateDTO, TaskRepository } from "../interfaces/task.interface";
 
-class TaskRepositoryPrisma implements TaskRepository {
+export class TaskRepositoryPrisma implements TaskRepository {
     async create(data: TaskCreateDTO): Promise<Task> {
         const result = await prisma.task.create({
             data: {
@@ -61,9 +61,6 @@ class TaskRepositoryPrisma implements TaskRepository {
                 userId
             },
         })
-        console.log(result)
         return result ? true : false
     }
 }
-
-export { TaskRepositoryPrisma }

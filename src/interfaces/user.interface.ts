@@ -19,7 +19,6 @@ export interface UserUpdateDTO {
     password?: string
 }
 
-
 export interface UserRepository {
     create(data: UserCreateDTO): Promise<User>
     findByEmail(email: string): Promise<User | null>

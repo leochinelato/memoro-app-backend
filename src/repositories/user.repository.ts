@@ -1,7 +1,7 @@
 import { prisma } from "../database/prisma-client";
 import { User, UserCreateDTO, UserRepository, UserUpdateDTO } from "../interfaces/user.interface";
 
-class UserRepositoryPrisma implements UserRepository {
+export class UserRepositoryPrisma implements UserRepository {
 
     async create(data: UserCreateDTO): Promise<User> {
         const result = await prisma.user.create({
@@ -54,5 +54,3 @@ class UserRepositoryPrisma implements UserRepository {
         return result ? true : false
     }
 }
-
-export { UserRepositoryPrisma }

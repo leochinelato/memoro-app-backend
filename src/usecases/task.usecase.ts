@@ -1,17 +1,13 @@
 import { TaskValidator } from "utils/validateDates";
 import { Task, TaskCreateDTO, TaskRepository } from "../interfaces/task.interface";
-import { UserRepository } from "../interfaces/user.interface";
 import { TaskRepositoryPrisma } from "../repositories/task.repository";
-import { UserRepositoryPrisma } from "../repositories/user.repository";
 import { TaskStatus } from "@prisma/client";
 
 export class TaskUseCase {
     private taskRepository: TaskRepository
-    private userRepository: UserRepository
 
     constructor() {
         this.taskRepository = new TaskRepositoryPrisma()
-        this.userRepository = new UserRepositoryPrisma()
     }
 
     async create({ name, description, status, userId, categoryId, startsAt, endsAt }: TaskCreateDTO): Promise<Task> {
@@ -54,7 +50,6 @@ export class TaskUseCase {
 
         return task
     }
-
 
     async update(userId: string, { id, name, description, status, categoryId, startsAt, endsAt }: Task) {
         const task = await this.taskRepository.findById(id)
