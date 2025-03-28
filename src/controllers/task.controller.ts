@@ -54,7 +54,6 @@ export class TaskController {
         const { name, description, status, categoryId, startsAt, endsAt } = request.body
         try {
             const data = await this.taskUseCase.update(userId, { id, name, description, status, categoryId, startsAt, endsAt })
-            console.log("alterado")
             return reply.code(200).send(data)
         } catch (error) {
             reply.code(500).send(error)
@@ -65,11 +64,9 @@ export class TaskController {
         const { id } = request.params
         const userId = getUserId(request)
         try {
-            console.log(id)
             const data = await this.taskUseCase.delete(id, userId)
             return reply.code(204).send(data)
         } catch (error) {
-            console.log(error)
             reply.code(500).send(error)
         }
     }

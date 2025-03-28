@@ -3,6 +3,7 @@ import jwt from "@fastify/jwt"
 import { userRoutes } from "./routes/user.routes"
 import { taskRoutes } from "./routes/task.routes"
 import dotenv from 'dotenv'
+import { categoryRoutes } from "routes/category.routes"
 
 dotenv.config()
 
@@ -18,6 +19,10 @@ app.register(userRoutes, {
 
 app.register(taskRoutes, {
     prefix: '/api/v1/tasks'
+})
+
+app.register(categoryRoutes, {
+    prefix: '/api/v1/categories'
 })
 
 app.listen(
