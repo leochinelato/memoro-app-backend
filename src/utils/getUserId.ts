@@ -1,5 +1,5 @@
-import { FastifyRequest } from 'fastify';
+import { FastifyRequest } from "fastify";
 
 export function getUserId(request: FastifyRequest): string {
-  return request.user?.id;
+  return request.user.id;
 }
